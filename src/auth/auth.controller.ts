@@ -10,21 +10,47 @@ import { SignInDataDTO } from './dto/signin-data.dto'
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    // @UseGuards(AuthGuard)
-    // @Get('signin')
-    // AutoSignIn(@Headers() { authorization }) {
-    //     return this.authService.AutoSignIn(authorization)
-    // }
+    @Get('test')
+    Test() {
+        return '555'
+    }
 
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
+    @Get('signin')
+    async AutoSignIn(@Headers() { authorization }, @Response() res: ResponseType, @Request() req: RequestType) {
+        const cookieAccess = req.cookies.accessToken
+        const data = await this.authService.AutoSignIn(authorization, req.cookies.accessToken)
+        if (cookieAccess) {
+            res.cookie('accessToken', data.token2, {
+                httpOnly: true,
+            })
+        }
+        delete data.token2
+        return res.send(data)
+    }
+
     @Post('signin')
-    async SignIn(@Body() signInData: SignInDataDTO, @Response() res: ResponseType, @Request() req: RequestType) {
+    async SignIn(@Body() signInData: SignInDataDTO, @Response() res: ResponseType) {
         const data = await this.authService.SignIn(signInData)
-        res.cookie('accessToken', data.token2, {
-            httpOnly: true,
-        })
+        if (signInData.cookie) {
+            res.cookie('accessToken', data.token2, {
+                httpOnly: true,
+            })
+        }
         delete data.token2
 
         return res.send(data)
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('signout')
+    SignOut(@Headers() { authorization }, @Response() res: ResponseType, @Request() req: RequestType) {
+        const cookieAccess = req.cookies.accessToken
+        if (cookieAccess) {
+            res.cookie('accessToken', '', {
+                httpOnly: true,
+            })
+        }
+        return res.send()
     }
 }

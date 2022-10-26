@@ -18,7 +18,6 @@ async function bootstrap() {
         methods: ['PUT', 'PATCH', 'DELETE'],
         credentials: true,
     })
-
     // CSRF Protection
     // app.use(csurf())
 

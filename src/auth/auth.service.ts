@@ -16,6 +16,29 @@ import { CodeError } from 'src/appEnum'
 export class AuthService {
     constructor(private jwtService: JwtService) {}
 
+    async AutoSignIn(authorization: string, cookieAccess: string) {
+        try {
+            const { username } = this.jwtService.verify<ResultOption1>(authorization)
+            const data = await getAccountByUsername(username)
+            if (data.length !== 1) {
+                throw new InternalServerErrorException()
+            }
+            let dataReturn: any = {
+                ...data[0].data(),
+                token: authorization,
+                token2: cookieAccess,
+            }
+            delete dataReturn.password
+            delete dataReturn.updateBy
+            delete dataReturn.updateDate
+            delete dataReturn.createBy
+            delete dataReturn.createDate
+            return dataReturn
+        } catch {
+            throw new InternalServerErrorException()
+        }
+    }
+
     async SignIn({ username, password, cookie }: SignInDataDTO) {
         const data = await getAccountByUsername(username)
         if (data.length > 1 || !(await bcrypt.compare(password, data[0].data().password))) {
