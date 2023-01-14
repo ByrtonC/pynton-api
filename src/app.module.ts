@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { AuthController } from './auth/auth.controller'
 import { AuthModule } from './auth/auth.module'
-import { AccountModule } from './account/account.module';
+import { AccountModule } from './account/account.module'
 
 @Global()
 @Module({

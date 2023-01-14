@@ -17,7 +17,7 @@ const serviceAccount = {
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://shiila-works-management-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL: 'https://pynton-platform-default-rtdb.asia-southeast1.firebasedatabase.app',
 })
 
 export const auth = admin.auth()

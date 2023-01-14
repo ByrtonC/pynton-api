@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common'
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common'
 import { AccountService } from './account.service'
 import { RegisterDataDTO } from './dto/register-data.dto'
 
