@@ -10,11 +10,6 @@ import { SignInDataDTO } from './dto/signin-data.dto'
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @Get('test')
-    Test() {
-        return '555'
-    }
-
     @UseGuards(AuthGuard)
     @Get('signin')
     async AutoSignIn(@Headers() { authorization }, @Response() res: ResponseType, @Request() req: RequestType) {
