@@ -31,7 +31,7 @@ export class AccountService {
             password,
             type: AccountType.member,
         }
-        const result = await addAccount(buildFormRegister)
+        const result = await addAccount(buildFormRegister as any)
         return result
     }
 }

@@ -15,7 +15,7 @@ async function bootstrap() {
     // enableCors
     app.enableCors({
         origin: ['http://localhost:3000', 'https://pynton.com'],
-        methods: ['PUT', 'PATCH', 'DELETE'],
+        // methods: ['PUT', 'PATCH', 'DELETE'],
         credentials: true,
     })
     // CSRF Protection
