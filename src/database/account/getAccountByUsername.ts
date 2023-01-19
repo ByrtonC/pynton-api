@@ -9,10 +9,10 @@ const getAccountByUsername = async (username: string) => {
         if (result.docs.length > 0) {
             return result.docs
         } else {
-            throw new InternalServerErrorException({ message: CodeError.usernameInvalid })
+            throw new InternalServerErrorException({ message: 'CodeError.usernameInvalid' })
         }
     } catch (error) {
-        throw new BadGatewayException({ message: error.response.message })
+        throw new BadGatewayException({ message: 'error.response.message' })
     }
 }
 
