@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Header, Headers, HttpCode, Post, Request, Response, UseGuards } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { Request as RequestType, Response as ResponseType } from 'express'
+import { Response as ResponseType } from 'express'
 import AuthGuard from 'src/guards/AuthGuard'
 import { AuthService } from './auth.service'
+import { RequestType } from 'src/guards/jwtInterface'
 
 // DTO
 import { SignInDataDTO } from './dto/signin-data.dto'
@@ -13,14 +14,6 @@ import { RegisterDataDTO } from './dto/register-data.dto'
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @Get('key')
-    async GenerateKeyAuth(@Response() res: ResponseType) {
-        const data = await this.authService.GenerateKeyAuth()
-        res.cookie('token', data.token, { httpOnly: true })
-        delete data.token
-        return res.send(data)
-    }
-
     @Post('register')
     async Register(@Request() req: RequestType, @Body() data: RegisterDataDTO) {
         return await this.authService.Register(data, req.cookies.token)
@@ -29,12 +22,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('signin')
     async AutoSignIn(@Response() res: ResponseType, @Request() req: RequestType) {
-        const data = await this.authService.AutoSignIn(req.cookies.accessToken)
-        res.cookie('accessToken', data.token, {
-            httpOnly: true,
-        })
-        delete data.token
-        return res.send(data)
+        return res.send(await this.authService.AutoSignIn(req.userData.uid))
     }
 
     @HttpCode(200)

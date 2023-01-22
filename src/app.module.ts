@@ -3,10 +3,11 @@ import { JwtModule } from '@nestjs/jwt'
 import { AuthController } from './auth/auth.controller'
 import { AuthModule } from './auth/auth.module'
 import { AccountModule } from './account/account.module'
+import { FileModule } from './file/file.module';
 
 @Global()
 @Module({
-    imports: [JwtModule.register({ secret: 'secretKey' }), AuthModule, AccountModule],
+    imports: [JwtModule.register({ secret: 'secretKey' }), AuthModule, AccountModule, FileModule],
     controllers: [],
     providers: [],
     exports: [JwtModule],

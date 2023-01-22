@@ -24,7 +24,7 @@ export class HttpExeptionFilter<T> implements ExceptionFilter {
         const request = ctx.getRequest<Request>()
         const status = exception instanceof HttpException ? exception.getStatus() : 500
 
-        // console.log(exception)
+        console.log(exception)
         const getRes = exception.getResponse() as any
 
         const LogData = {

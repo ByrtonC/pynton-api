@@ -15,6 +15,7 @@ async function bootstrap() {
     // enableCors
     app.enableCors({
         origin: ['http://localhost:3000', 'https://pynton.com'],
+        // origin: ['*'],
         // methods: ['PUT', 'PATCH', 'DELETE'],
         credentials: true,
     })

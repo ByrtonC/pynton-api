@@ -1,5 +1,11 @@
+import { Request } from 'express'
 export type AccountType = 'owner' | 'member' | 'visitor'
-export interface ResultOption1 {
+export interface DataInTokenAccountType {
     username: string
     role: AccountType
+    uid: string
+}
+
+export interface RequestType<T = DataInTokenAccountType> extends Request {
+    userData: T
 }

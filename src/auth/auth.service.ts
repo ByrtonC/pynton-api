@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { SignInDataDTO } from './dto/signin-data.dto'
-import { ResultOption1 } from 'src/guards/jwtInterface'
+import { DataInTokenAccountType } from 'src/guards/jwtInterface'
 
 // dto
 import { RegisterDataDTO } from './dto/register-data.dto'
@@ -56,16 +56,11 @@ export class AuthService {
         return result
     }
 
-    async AutoSignIn(authorization: string) {
+    async AutoSignIn(uid: string) {
         try {
-            const { username } = this.jwtService.verify<ResultOption1>(authorization)
-            const data = await getAccountByUsername(username)
-            if (data.length !== 1) {
-                throw new InternalServerErrorException()
-            }
+            const data = await getAccountByID(uid)
             let dataReturn: any = {
-                ...data[0].data(),
-                token: authorization,
+                ...data.data(),
             }
             delete dataReturn.password
             delete dataReturn.updateBy
@@ -85,11 +80,15 @@ export class AuthService {
         }
         try {
             const { role } = data[0].data()
-            const payload: ResultOption1 = {
+            const payload: DataInTokenAccountType = {
                 username,
                 role,
+                uid: data[0].id,
             }
-            const authToken = this.jwtService.sign(payload, { expiresIn: '3600s' })
+            const authToken = this.jwtService.sign(
+                payload,
+                // , { expiresIn: '3600s' }
+            )
             let dataReturn: any = {
                 ...data[0].data(),
                 token: authToken,

@@ -1,37 +1,24 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common'
 import { RegisterDataDTO } from './dto/register-data.dto'
 
+// dto
+import { EditAccountDataDTO } from './dto/editAccount-data.dto'
+
 // database
 import checkAccountByName from 'src/database/account/checkAccountByName'
 import checkAccountByUsername from 'src/database/account/checkAccountByUsername'
 import addAccount from 'src/database/account/addAccount'
-
-// enum
-import { AccountType, CodeError } from 'src/appEnum'
-
-import * as bcrypt from 'bcrypt'
+import getAccountByID from 'src/database/account/getAccountByID'
+import editAccountByID from 'src/database/account/editAccountByID'
 
 @Injectable()
 export class AccountService {
-    async Register(registerData: RegisterDataDTO) {
-        const password = await bcrypt.hash(registerData.password, await bcrypt.genSalt(Math.random()))
-        const [existsUsername, existsName] = await Promise.all([
-            checkAccountByUsername(registerData.username),
-            checkAccountByName(registerData.name),
-        ])
-        if (existsName) {
-            throw new InternalServerErrorException({ message: CodeError.existsName })
-        }
-        if (existsUsername) {
-            throw new InternalServerErrorException({ message: CodeError.existsUsername })
-        }
+    async GetUserAccountByID(uid: string) {
+        const result = await getAccountByID(uid)
+        return { ...result.data(), uid: result.id, password: undefined }
+    }
 
-        const buildFormRegister = {
-            ...registerData,
-            password,
-            type: AccountType.member,
-        }
-        const result = await addAccount(buildFormRegister as any)
-        return result
+    async EditUserAccountByID(uid: string, data: EditAccountDataDTO) {
+        return await editAccountByID(uid, data)
     }
 }
